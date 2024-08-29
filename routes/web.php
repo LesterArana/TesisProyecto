@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
@@ -9,54 +10,36 @@ use App\Http\Controllers\DocumentacionController;
 use App\Http\Controllers\NominaController;
 use App\Http\Controllers\DeduccionController;
 
+
 Auth::routes();
 
-Route::middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
-    
+// Ruta para la generación de PDF de nóminas
+Route::get('nominas/pdf', [NominaController::class, 'pdf'])->name('nominas.pdf');
 
-    // Rutas para Empleados y Puestos
+
+// Ruta principal del sitio
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Grupo de rutas protegidas por autenticación
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('layout.index');
+    Route::get('/home', [AdminController::class, 'index'])->name('layout.index');
+
+    // Rutas para Empleados
     Route::resource('empleados', EmpleadosController::class);
-    Route::resource('puestos', PuestoController::class);
-    route::resource('documentaciones', DocumentacionController::class);
     Route::get('/empleados/{id}/edit', [EmpleadosController::class, 'edit'])->name('empleados.edit');
     Route::put('/empleados/{id}', [EmpleadosController::class, 'update'])->name('empleados.update');
 
-    
+    // Rutas para Puestos
+    Route::resource('puestos', PuestoController::class);
+
     // Rutas para Documentación
-    Route::get('/documentaciones', [DocumentacionController::class, 'index'])->name('documentaciones.index');
-    Route::get('/documentaciones/create', [DocumentacionController::class, 'create'])->name('documentaciones.create');
+    Route::resource('documentaciones', DocumentacionController::class);
     Route::get('/documentaciones/{id}', [DocumentacionController::class, 'show'])->name('documentaciones.show');
-    Route::post('/documentaciones', [DocumentacionController::class, 'store'])->name('documentaciones.store');
-    Route::delete('/documentaciones/{documentacion}', [DocumentacionController::class, 'destroy'])->name('documentaciones.destroy');
-    Route::put('/empleados/{id}', [EmpleadosController::class, 'update'])->name('empleados.update');
 
+    // Rutas para Nóminas
+    Route::resource('nominas', NominaController::class);
 
-   //Rutas nomina
-  
-
-   Route::resource('nominas', NominaController::class);
-   Route::get('/nominas/create', [NominaController::class, 'create'])->name('nominas.create');
-Route::post('/nominas', [NominaController::class, 'store'])->name('nominas.store');
-
-
-//Rutas deducciones
-Route::resource('nominas', NominaController::class);
-Route::resource('deducciones', DeduccionController::class);
-Route::resource('nominas', NominaController::class);
-
-
-
-
-
-   
+    // Rutas para Deducciones
+    Route::resource('deducciones', DeduccionController::class);
 });
-
-
-
-
-
-
-

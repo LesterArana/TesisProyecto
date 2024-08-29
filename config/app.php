@@ -156,6 +156,8 @@ return [
 
     'providers' => [
 
+        
+    
         /*
          * Laravel Framework Service Providers...
          */
@@ -208,8 +210,18 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
-    ])->toArray(),
+    'aliases' => [
+    // Otras alias
+    'Route' => Illuminate\Support\Facades\Route::class,
+    'Auth' => Illuminate\Support\Facades\Auth::class,
+    
+],
+
+
+
+
+
+
+
 
 ];

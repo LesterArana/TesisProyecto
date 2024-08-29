@@ -10,8 +10,6 @@ class Puesto extends Model
 
     protected $fillable = [
         'nombre', 
-        'salario_hora', 
-        'salario_dia', 
         'salario_quincena', 
         'salario_mes'
     ];

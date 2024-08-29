@@ -1,19 +1,19 @@
 @extends('layouts.index')
 
 @section('content')
-<div class="container">
-    <h2>Listado de Puestos</h2>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Listado de Puestos</h2>
 
-    <a href="{{ route('puestos.create') }}" class="btn btn-primary mb-3">Agregar Puesto</a>
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{{ route('puestos.create') }}" class="btn btn-success">Agregar Puesto <i class="fas fa-plus-circle"></i></a>
+    </div>
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-hover table-striped table-bordered">
+        <thead class="thead-dark">
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Salario por Hora</th>
-                <th>Salario por Día</th>
-                <th>Salario por Mes</th>
+                <th>Salario por Mes (Q)</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -22,15 +22,13 @@
                 <tr>
                     <td>{{ $puesto->id }}</td>
                     <td>{{ $puesto->nombre }}</td>
-                    <td>{{ $puesto->salario_hora }}</td>
-                    <td>{{ $puesto->salario_dia }}</td>
-                    <td>{{ $puesto->salario_mes }}</td>
-                    <td>
-                        <a href="{{ route('puestos.edit', $puesto->id) }}" class="btn btn-warning">Editar</a>
-                        <form action="{{ route('puestos.destroy', $puesto->id) }}" method="POST" style="display:inline-block;">
+                    <td>Q {{ number_format($puesto->salario_mes, 2) }}</td>
+                    <td class="d-flex">
+                        <a href="{{ route('puestos.edit', $puesto->id) }}" class="btn btn-warning btn-sm mr-2">Editar</a>
+                        <form action="{{ route('puestos.destroy', $puesto->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este puesto?');" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar este puesto?')">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                     </td>
                 </tr>

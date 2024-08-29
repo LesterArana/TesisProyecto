@@ -1,13 +1,13 @@
 @extends('layouts.index')
 
 @section('content')
-<div class="container">
-    <h2>Crear Nueva Nómina</h2>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Crear Nueva Nómina</h2>
 
-    <form action="{{ route('nominas.store') }}" method="POST">
+    <form action="{{ route('nominas.store') }}" method="POST" class="shadow p-4 rounded bg-white">
         @csrf
 
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label for="empleado_id" class="form-label">Empleado</label>
             <select name="empleado_id" class="form-control" required>
                 @foreach($empleados as $empleado)
@@ -16,86 +16,72 @@
             </select>
         </div>
 
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label for="tipo_pago" class="form-label">Tipo de Pago</label>
-            <select class="form-control" id="tipo_pago" name="tipo_pago" required onchange="togglePagoFields()">
-                <option value="hora">Por Hora</option>
-                <option value="dia">Por Día</option>
+            <select class="form-control" id="tipo_pago" name="tipo_pago" required>
                 <option value="quincena">Quincenal</option>
                 <option value="mes">Mensual</option>
             </select>
         </div>
-
-        <div id="horas_trabajadas_field" class="mb-3">
-            <label for="horas_trabajadas" class="form-label">Horas Trabajadas</label>
-            <input type="number" name="horas_trabajadas" id="horas_trabajadas" class="form-control" value="0" min="0">
+        
+        <div class="form-group mb-3">
+            <label for="bonificacion_incentivo" class="form-label">Días Trabajados</label>
+            <input type="number" name="dias_trabajados" class="form-control" value="0" step="0.01">
         </div>
 
-        <div id="dias_trabajados_field" class="mb-3" style="display:none;">
-            <label for="dias_trabajados" class="form-label">Días Trabajados</label>
-            <input type="number" name="dias_trabajados" id="dias_trabajados" class="form-control" value="0" min="0">
-        </div>
-
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label for="horas_extras" class="form-label">Horas Extras</label>
-            <input type="number" name="horas_extras" class="form-control" value="0" min="0">
+            <input type="number" name="horas_extras" class="form-control" value="0" step="0.01" min="0">
         </div>
-
-        <div class="mb-3">
+        
+        <div class="form-group mb-3">
             <label for="valor_hora_extra" class="form-label">Valor Hora Extra</label>
-            <input type="number" name="valor_hora_extra" class="form-control" value="0" step="0.01">
+            <input type="number" name="valor_hora_extra" class="form-control" value="0" step="0.01" min="0">
+        </div>
+        
+        <div class="form-group mb-3">
+            <label for="bonificacion_incentivo" class="form-label">Bonificación Incentivo</label>
+            <input type="number" name="bonificacion_incentivo" class="form-control" value="0" step="0.01">
         </div>
 
-        <div class="mb-3">
-            <label for="deducciones" class="form-label">Deducciones</label>
-            <select name="deducciones[]" class="form-control" multiple>
-                @foreach($deducciones as $deduccion)
-                    <option value="{{ $deduccion->id }}">{{ $deduccion->descripcion }} - 
-                        @if($deduccion->es_porcentaje)
-                            {{ $deduccion->monto }}%
-                        @else
-                            ${{ $deduccion->monto }}
-                        @endif
-                    </option>
-                @endforeach
-            </select>
+        <div class="form-group mb-3">
+            <label for="bonificacion_rendimiento" class="form-label">Bonificación Rendimiento</label>
+            <input type="number" name="bonificacion_rendimiento" class="form-control" value="0" step="0.01">
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="cantidad_iggs" class="form-label">IGSS (%)</label>
+            <input type="number" name="cantidad_iggs" class="form-control" value="0" step="0.01">
         </div>
         
 
-        <div class="mb-3">
+        <div class="form-group mb-3">
+            <label for="pasajes_viaticos" class="form-label">Pasajes o Viáticos</label>
+            <input type="number" name="pasajes_viaticos" class="form-control" value="0" step="0.01">
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="deducciones" class="form-label">Deducciones</label>
+            <select name="deducciones[]" class="form-control" multiple>
+                @foreach($deducciones as $deduccion)
+                    <option value="{{ $deduccion->id }}">{{ $deduccion->descripcion }} - @if($deduccion->es_porcentaje){{ $deduccion->monto }}%@else{{ 'Q ' . number_format($deduccion->monto, 2) }}@endif</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
             <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
             <input type="date" name="fecha_inicio" class="form-control" required>
         </div>
 
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label for="fecha_fin" class="form-label">Fecha de Fin</label>
             <input type="date" name="fecha_fin" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Crear Nómina</button>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Crear Nómina</button>
+        </div>
     </form>
 </div>
-
-<script>
-    function togglePagoFields() {
-        const tipoPago = document.getElementById('tipo_pago').value;
-        const horasField = document.getElementById('horas_trabajadas_field');
-        const diasField = document.getElementById('dias_trabajados_field');
-
-        horasField.style.display = 'none';
-        diasField.style.display = 'none';
-
-        if (tipoPago === 'hora') {
-            horasField.style.display = 'block';
-        } else if (tipoPago === 'dia') {
-            diasField.style.display = 'block';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        togglePagoFields(); // Inicializar los campos cuando la página se carga
-    });
-
-    document.getElementById('tipo_pago').addEventListener('change', togglePagoFields);
-</script>
 @endsection
