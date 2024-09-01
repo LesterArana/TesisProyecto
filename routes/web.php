@@ -9,6 +9,8 @@ use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\DocumentacionController;
 use App\Http\Controllers\NominaController;
 use App\Http\Controllers\DeduccionController;
+use App\Http\Controllers\DashboardController;
+
 
 
 Auth::routes();
@@ -17,13 +19,15 @@ Auth::routes();
 Route::get('nominas/pdf', [NominaController::class, 'pdf'])->name('nominas.pdf');
 
 
+
+
 // Ruta principal del sitio
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Grupo de rutas protegidas por autenticación
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('layout.index');
-    Route::get('/home', [AdminController::class, 'index'])->name('layout.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/', [AdminController::class, 'index'])->name('layout.index');
 
     // Rutas para Empleados
     Route::resource('empleados', EmpleadosController::class);
