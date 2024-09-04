@@ -197,15 +197,15 @@ public function voucher($id)
     try {
         $nomina = Nomina::with('empleado')->findOrFail($id);
 
-        // Verifica que el empleado y el puesto existen
+        // Puedes agregar más relaciones si lo necesitas
         $empleado = $nomina->empleado;
         $puesto = $empleado->puesto;
 
-        // Genera el PDF
-        $pdf = PDF::loadView('nominas.voucher', compact('nomina', 'empleado', 'puesto'));
+        $igs_descuento = $nomina->cantidad_iggs; // Asegúrate de que este campo está en la base de datos y en el modelo
+
+        $pdf = PDF::loadView('nominas.voucher', compact('nomina', 'empleado', 'puesto', 'igs_descuento'));
         return $pdf->download('voucher_'.$nomina->id.'.pdf');
     } catch (\Exception $e) {
-        // Redirige con un mensaje de error si algo falla
         return redirect()->back()->withErrors('Error al generar el voucher: ' . $e->getMessage());
     }
 }

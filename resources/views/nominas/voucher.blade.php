@@ -92,7 +92,11 @@
                     <td>Q {{ number_format($nomina->bonificacion_rendimiento, 2) }}</td>
                 </tr>
                 <tr>
-                    <th>Total Deducciones:</th>
+                    <th>IGSS</th>
+                    <td>Q {{ number_format($igs_descuento, 2) }}</td>
+                </tr>
+                <tr>
+                    <th>Otras Deducciones:</th>
                     <td>Q {{ number_format($nomina->deducciones, 2) }}</td>
                 </tr>
                 <tr>
