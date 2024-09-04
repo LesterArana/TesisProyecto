@@ -11,23 +11,30 @@ use App\Http\Controllers\NominaController;
 use App\Http\Controllers\DeduccionController;
 use App\Http\Controllers\DashboardController;
 
+Auth::routes(['register' => false]); // Desactiva registro si no es necesario
 
 
-Auth::routes();
 
-// Ruta para la generación de PDF de nóminas
+
 Route::get('nominas/pdf', [NominaController::class, 'pdf'])->name('nominas.pdf');
 
+Route::get('nominas/voucher/{id}', [NominaController::class, 'voucher'])->name('nominas.voucher');
 
 
 
 // Ruta principal del sitio
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Redirección para cualquier intento de acceso a /register
+Route::get('/register', function() {
+    return redirect('/login');
+});
+
 // Grupo de rutas protegidas por autenticación
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // Ruta del dashboard después del login
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/', [AdminController::class, 'index'])->name('layout.index');
 
     // Rutas para Empleados
     Route::resource('empleados', EmpleadosController::class);
@@ -43,7 +50,16 @@ Route::middleware('auth')->group(function () {
 
     // Rutas para Nóminas
     Route::resource('nominas', NominaController::class);
+   
 
     // Rutas para Deducciones
     Route::resource('deducciones', DeduccionController::class);
+
+    // Ruta protegida del administrador
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+});
+
+// Ruta para manejar URLs no encontradas
+Route::fallback(function () {
+    return redirect()->route('dashboard.index')->with('error', 'Página no encontrada');
 });

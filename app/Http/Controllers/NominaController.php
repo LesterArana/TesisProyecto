@@ -9,7 +9,6 @@ use App\Models\Puesto;
 use App\Models\Deduccion;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-
 class NominaController extends Controller
 {
     public function index(Request $request)
@@ -32,34 +31,30 @@ class NominaController extends Controller
     }
 
     public function pdf(Request $request)
-{
-    $nominas = Nomina::whereBetween('fecha_inicio', [$request->fecha_inicio, $request->fecha_fin])->get();
+    {
+        $nominas = Nomina::whereBetween('fecha_inicio', [$request->fecha_inicio, $request->fecha_fin])->get();
 
-    $planilla = $nominas->map(function($nomina) {
-        return [
-            'apellidos' => $nomina->empleado->apellidos,
-            'nombres' => $nomina->empleado->nombres,
-            'sueldo_base' => ($nomina->tipo_pago == 'quincena') ? $nomina->puesto->salario_quincena : $nomina->puesto->salario_mes,
-            'dias_trabajados' => $nomina->dias_trabajados,
-            'horas_extras' => $nomina->horas_extras,
-            'total_horas_extras' => $nomina->valor_hora_extra * $nomina->horas_extras,
-            'bonificacion_incentivo' => $nomina->bonificacion_incentivo,
-            'bonificacion_rendimiento' => $nomina->bonificacion_rendimiento,
-            'cantidad_iggs' => $nomina->cantidad_iggs,
-            'otras_deducciones' => $nomina->deducciones, // Asegúrate de que esta columna exista en tu base de datos
-            'pasajes_viaticos' => $nomina->pasajes_viaticos,
-            'salario_liquido' => $nomina->salario_liquido,
-        ];
-    });
+        $planilla = $nominas->map(function($nomina) {
+            return [
+                'nomina_id' => $nomina->id,
+                'apellidos' => $nomina->empleado->apellidos,
+                'nombres' => $nomina->empleado->nombres,
+                'sueldo_base' => ($nomina->tipo_pago == 'quincena') ? $nomina->puesto->salario_quincena : $nomina->puesto->salario_mes,
+                'dias_trabajados' => $nomina->dias_trabajados,
+                'horas_extras' => $nomina->horas_extras,
+                'total_horas_extras' => $nomina->valor_hora_extra * $nomina->horas_extras,
+                'bonificacion_incentivo' => $nomina->bonificacion_incentivo,
+                'bonificacion_rendimiento' => $nomina->bonificacion_rendimiento,
+                'cantidad_iggs' => $nomina->cantidad_iggs,
+                'otras_deducciones' => $nomina->deducciones ?? 0, // Asegúrate de que esta columna exista en tu base de datos
+                'pasajes_viaticos' => $nomina->pasajes_viaticos,
+                'salario_liquido' => $nomina->salario_liquido,
+            ];
+        });
 
-    $pdf = Pdf::loadView('nominas.pdf', compact('planilla', 'request'))->setPaper('a4', 'landscape'); // 'landscape' para horizontal
-    return $pdf->stream('planilla.pdf');
-}
-
-    
-
-
-
+        $pdf = Pdf::loadView('nominas.pdf', compact('planilla', 'request'))->setPaper('a4', 'landscape');
+        return $pdf->stream('planilla.pdf');
+    }
 
     public function show($id)
     {
@@ -172,29 +167,48 @@ class NominaController extends Controller
     }
 
     protected function generarPlanillaDesdeIndex($nominas, $fechaInicio, $fechaFin)
-    {
-        $planilla = $nominas->map(function($nomina) {
-            return [
-                'apellidos' => $nomina->empleado->apellidos,
-                'nombres' => $nomina->empleado->nombres,
-                'sueldo_base' => ($nomina->tipo_pago == 'quincena') ? $nomina->puesto->salario_quincena : $nomina->puesto->salario_mes,
-                'bonificacion_incentivo' => $nomina->bonificacion_incentivo,
-                'cantidad_iggs' => $nomina->cantidad_iggs,
-                'dias_trabajados' => $nomina->dias_trabajados,
-                'bonificacion_rendimiento' => $nomina->bonificacion_rendimiento,
-                'pasajes_viaticos' => $nomina->pasajes_viaticos,
-                'total_descuentos' => $nomina->total_descuentos, // Este es solo IGSS ahora
-                'deducciones' => $nomina->deducciones, // Deducciones sin IGSS
-                'salario_liquido' => $nomina->salario_liquido,
-                'horas_extras' => $nomina->horas_extras,
-                'total_horas_extras' => $nomina->valor_hora_extra * $nomina->horas_extras,
-            ];
-        });
+{
+    $planilla = $nominas->map(function($nomina) {
+        return [
+            'nomina_id' => $nomina->id,
+            'apellidos' => $nomina->empleado->apellidos,
+            'nombres' => $nomina->empleado->nombres,
+            'sueldo_base' => ($nomina->tipo_pago == 'quincena') ? $nomina->puesto->salario_quincena : $nomina->puesto->salario_mes,
+            'dias_trabajados' => $nomina->dias_trabajados,
+            'horas_extras' => $nomina->horas_extras,
+            'total_horas_extras' => $nomina->valor_hora_extra * $nomina->horas_extras,
+            'bonificacion_incentivo' => $nomina->bonificacion_incentivo,
+            'bonificacion_rendimiento' => $nomina->bonificacion_rendimiento,
+            'cantidad_iggs' => $nomina->cantidad_iggs,
+            'deducciones' => $nomina->deducciones ?? 0,
+            'pasajes_viaticos' => $nomina->pasajes_viaticos,
+            'salario_liquido' => $nomina->salario_liquido,
+        ];
+    });
 
-        return view('nominas.planilla', compact('planilla', 'fechaInicio', 'fechaFin'));
+    return view('nominas.planilla', compact('planilla', 'fechaInicio', 'fechaFin'));
+}
+
+
+public function voucher($id)
+{
+    set_time_limit(120); // Aumenta el límite de tiempo de ejecución a 120 segundos
+
+    try {
+        $nomina = Nomina::with('empleado')->findOrFail($id);
+
+        // Verifica que el empleado y el puesto existen
+        $empleado = $nomina->empleado;
+        $puesto = $empleado->puesto;
+
+        // Genera el PDF
+        $pdf = PDF::loadView('nominas.voucher', compact('nomina', 'empleado', 'puesto'));
+        return $pdf->download('voucher_'.$nomina->id.'.pdf');
+    } catch (\Exception $e) {
+        // Redirige con un mensaje de error si algo falla
+        return redirect()->back()->withErrors('Error al generar el voucher: ' . $e->getMessage());
     }
-
-
+}
 
 }
 

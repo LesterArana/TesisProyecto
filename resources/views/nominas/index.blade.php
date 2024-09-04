@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <table class="table table-hover table-striped table-bordered">
+    <table class="table table-hover table-striped table-borde   red">
         <thead class="thead-dark">
             <tr>
                 <th>ID</th>
@@ -45,14 +45,17 @@
                 <td>{{ $nomina->empleado->nombres }} {{ $nomina->empleado->apellidos }}</td>
                 <td>Q {{ number_format($nomina->salario_neto, 2) }}</td>
                 <td class="d-flex">
-                    <a href="{{ route('nominas.show', $nomina->id) }}" class="btn btn-info btn-sm mr-2">Ver</a>
+                    <td>
+                        <a href="{{ route('nominas.voucher', $nomina->id) }}" class="btn btn-sm btn-info">
+                            Generar Voucher
+                        </a>
+                        <form action="{{ route('nominas.destroy', $nomina->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                  
                     
-                    <!-- Botón de eliminar -->
-                    <form action="{{ route('nominas.destroy', $nomina->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta nómina?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
                 </td>
             </tr>
             @endforeach

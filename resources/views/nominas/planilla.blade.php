@@ -23,6 +23,7 @@
                 <th class="text-center text-danger">Otras Deducciones</th>
                 <th class="text-center">Pasajes o Viáticos</th>
                 <th class="text-center text-success">Salario Líquido</th>
+                <th class="text-center">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +42,9 @@
                 <td class="text-center text-danger">Q {{ number_format($empleado['deducciones'], 2) }}</td>
                 <td class="text-center">Q {{ number_format($empleado['pasajes_viaticos'], 2) }}</td>
                 <td class="text-center font-weight-bold text-success">Q {{ number_format($empleado['salario_liquido'], 2) }}</td>
+                <td class="text-center">
+                    <a href="{{ route('nominas.voucher', ['id' => $empleado['nomina_id']]) }}" class="btn btn-sm btn-primary mb-2">Generar Voucher</a>
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -50,20 +54,21 @@
                 <td class="text-center text-success">Q {{ number_format($planilla->sum('bonificacion_incentivo'), 2) }}</td>
                 <td class="text-center text-success">Q {{ number_format($planilla->sum('bonificacion_rendimiento'), 2) }}</td>
                 <td class="text-center text-danger">Q {{ number_format($planilla->sum('cantidad_iggs'), 2) }}</td>
-                <td class="text-center text-danger">Q {{ number_format($planilla->sum('deducciones'), 2) }}</td>
+                <td class="text-center text-danger">
+                    Q {{ number_format($empleado['deducciones'] ?? 0, 2) }}
+                </td>
+                
                 <td class="text-center">Q {{ number_format($planilla->sum('pasajes_viaticos'), 2) }}</td>
                 <td class="text-center text-success font-weight-bold">Q {{ number_format($planilla->sum('salario_liquido'), 2) }}</td>
+                <td class="text-center"></td> <!-- Espacio vacío para alineación de los totales -->
             </tr>
         </tfoot>
     </table>
-@endif
+    @endif
 
-
-
-
-
-    <a href="{{ route('nominas.pdf', ['fecha_inicio' => request('fecha_inicio'), 'fecha_fin' => request('fecha_fin')]) }}" class="btn btn-secondary">Generar PDF</a>
-
-    <a href="{{ route('nominas.index') }}" class="btn btn-primary mt-3">Volver al Listado de Nóminas</a>
+    <div class="d-flex justify-content-center mt-4">
+        <a href="{{ route('nominas.pdf', ['fecha_inicio' => request('fecha_inicio'), 'fecha_fin' => request('fecha_fin')]) }}" class="btn btn-secondary mr-2">Generar PDF</a>
+        <a href="{{ route('nominas.index') }}" class="btn btn-primary">Volver al Listado de Nóminas</a>
+    </div>
 </div>
 @endsection
