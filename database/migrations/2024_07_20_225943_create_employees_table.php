@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->unique()->constrained('people')->onDelete('restrict');
-            $table->foreignId('position_id')->unique()->constrained('positions')->onDelete('restrict');
-
+            $table->foreignId('person_id')->constrained('people')->onDelete('restrict');
+            $table->foreignId('position_id')->constrained('positions')->onDelete('restrict');
             $table->timestamps();
         });
     }

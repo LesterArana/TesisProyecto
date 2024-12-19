@@ -20,7 +20,7 @@ class DashboardCharts extends Component
 
     public function mount()
     {
-        // Deudas de Proveedores
+      /*  // Deudas de Proveedores
         $suppliers = Supplier::with(['credits' => function($query) {
             $query->where('status', 1);
         }, 'shoppings' => function($query) {
@@ -65,7 +65,7 @@ class DashboardCharts extends Component
             $this->productNames[] = $product->name;
             $this->productStocks[] = $product->stock;
             $this->totalStock += $product->stock;
-        }
+        }*/
     }
 
     public function render()

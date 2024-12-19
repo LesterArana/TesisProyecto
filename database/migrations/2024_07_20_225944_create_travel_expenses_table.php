@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('voucher_number')->unique();
             $table->string('description');
             $table->boolean('status')->default(false);
-            $table->foreignId('employee_id')->unique()->constrained('employees')->onDelete('restrict');
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('restrict');
             $table->timestamps();
         });
     }

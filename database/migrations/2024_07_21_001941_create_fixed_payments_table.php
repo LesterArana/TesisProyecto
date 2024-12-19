@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('fixed_payments', function (Blueprint $table) {
             $table->id();
-            $table->decimal('subject to iggs payment',2,8);
-            $table->decimal('bonus_incentive',2,8);
+            $table->decimal('subject_to_iggs_payment',8,2);
+            $table->decimal('bonus_incentive',8,2);
             $table->timestamps();
         });
     }

@@ -17,6 +17,8 @@
     },
     "dependencies": {
         "chart.js": "^4.4.4",
+        "html5-qrcode": "^2.3.8",
+        "instascan": "^1.0.0",
         "sweetalert2": "^11.12.3"
     }
 }

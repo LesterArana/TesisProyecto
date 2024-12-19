@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        return redirect()->route('welcome_iglu');
+        return redirect()->route('welcome_iserpro');
     }
 
     /**

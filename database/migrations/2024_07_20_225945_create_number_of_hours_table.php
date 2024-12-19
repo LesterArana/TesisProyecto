@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->decimal('amount', 8, 2);
-            $table->string('description');
             $table->boolean('type_of_hours')->nullable();
-            $table->foreignId('employee_id')->unique()->constrained('employees')->onDelete('restrict');
-            $table->foreignId('payment_method_id')->nullable()->constrained('payment_methods')->onDelete('restrict');
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('restrict');
             $table->timestamps();
+
+            // Índice compuesto para evitar duplicados por employee_id y date
+            $table->unique(['employee_id', 'date'], 'unique_employee_date');
         });
     }
+
 
     /**
      * Reverse the migrations.

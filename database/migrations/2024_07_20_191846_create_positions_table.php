@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->decimal('salary', 8, 2);
             $table->decimal('night_extra_hour', 8, 2);
             $table->decimal('daytime_overtime', 8, 2);

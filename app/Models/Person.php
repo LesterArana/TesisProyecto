@@ -9,16 +9,11 @@ class Person extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type_person','company_name','address','email', 'phone_number','nit_number','state'];
+    protected $fillable = ['name','address','dpi', 'phone_number','email','state'];
 
-  
-    public function supplier(){
-        return $this->hasOne(Supplier::class);
+
+    public function employee(){
+        return $this->hasOne(Employee::class);
     }
-
-    public function customer(){
-        return $this->hasOne(Customer::class);
-    }
-
 
 }

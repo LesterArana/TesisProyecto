@@ -1,5 +1,5 @@
 <div class="py-12">
-    @livewire('components.dashboard-cards')
+    {{--@livewire('components.dashboard-cards')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
@@ -34,7 +34,7 @@
             </div>
 
         </div>
-    </div>
+    </div>--}}
 </div>
 
 <!-- ApexCharts Script -->

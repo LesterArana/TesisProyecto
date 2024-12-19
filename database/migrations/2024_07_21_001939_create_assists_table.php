@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('assists', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->boolean('activity');
             $table->boolean('status')->default(1);
             $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('restrict');
-            $table->foreignId('destination_plant')->constrained('destination_plants')->onDelete('restrict');
+            $table->foreignId('projet_id')->constrained('projets')->onDelete('restrict');
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
             $table->timestamps();
         });
