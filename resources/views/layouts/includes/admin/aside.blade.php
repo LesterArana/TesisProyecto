@@ -1,11 +1,10 @@
 @php
     $links = [
-
-        [
-            'name' => 'Formas de pago',
-            'url' => route('payment_methods.index'),
-            'active' => request()->routeIs('payment_methods.index','payment_methods.create','payment_methods.show','payment_methods.edit'),
-            'icon' => 'fa-solid fa-money-check-dollar',
+         [
+            'name' => 'Dashboard',
+            'url' => route('dashboard'),
+            'active' => request()->routeIs('dashboard'),
+            'icon' => 'fa-solid fa-file-invoice-dollar',
             'permission'=>'payment_methods.index',
         ],
         [
@@ -36,7 +35,34 @@
             'icon' => 'fa-solid fa-hammer',
             'permission'=>'payment_methods.index',
         ],
-
+          [
+            'name' => 'Viáticos',
+            'url' => route('travel-expenses.index'),
+            'active' => request()->routeIs('travel-expenses.index','travel-expenses.create','travel-expenses.show','travel-expenses.edit'),
+            'icon' => 'fa-solid fa-truck-plane',
+            'permission'=>'payment_methods.index',
+        ],
+         [
+            'name' => 'Horas extras',
+            'url' => route('number-of-hours.index'),
+            'active' => request()->routeIs('number-of-hours.index','number-of-hours.create','number-of-hours.show','number-of-hours.edit'),
+            'icon' => 'fa-solid fa-stopwatch-20',
+            'permission'=>'payment_methods.index',
+        ],
+         [
+        'name' => 'Horarios',
+        'url' => route('schedules.index'),
+        'active' => request()->routeIs('schedules.index', 'schedules.create', 'schedules.show', 'schedules.edit'),
+        'icon' => 'fa-solid fa-clock',
+        'permission' => 'payment_methods.index',
+        ],
+        [
+        'name' => 'Pagos Fijos',
+        'url' => route('fixed-payments.index'),
+        'active' => request()->routeIs('fixed-payments.index', 'fixed-payments.create', 'fixed-payments.show', 'fixed-payments.edit'),
+        'icon' => 'fa-solid fa-money-bill-wave',
+        'permission' => 'payment_methods.index',
+        ],
         [
             'name' => 'Usuarios',
             'url' => route('user.index'),
@@ -44,6 +70,24 @@
             'icon' => 'fa-solid fa-people-group',
             'permission'=>'user.index',
         ],
+
+        [
+            'name' => 'Nóminas',
+            'url' => route('payrolls.index'),
+            'active' => request()->routeIs('payrolls.index','payrolls.create','payrolls.show','payrolls.edit'),
+            'icon' => 'fa-solid fa-file-alt',
+            'permission'=>'payment_methods.index',
+        ],
+         [
+            'name' => 'Adelantos',
+            'url' => route('credit.index'),
+            'active' => request()->routeIs('credit.index','credit.create','credit.show'),
+            'icon' => 'fa-solid fa-wallet',
+            'permission'=>'payment_methods.index',
+        ],
+
+
+
 
     ];
 @endphp
@@ -56,7 +100,8 @@
         }"
        aria-label="Sidebar">
 
-    <div class="h-full px-3 py-1 pb-4 overflow-y-auto bg-white rounded-lg mx-1 py-3" style="box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+    <div class="h-full px-3 py-1 pb-4 overflow-y-auto bg-white rounded-lg mx-1 py-3"
+         style="box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
         <ul class="space-y-2 font-medium text-sm">
             @foreach($links as $link)
                 @can($link['permission'])

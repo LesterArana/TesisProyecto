@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('assists', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('start_date')->nullable();
-            $table->dateTime('end_date')->nullable();
-            $table->boolean('activity');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->boolean('status')->default(1);
             $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('restrict');
             $table->foreignId('projet_id')->constrained('projets')->onDelete('restrict');

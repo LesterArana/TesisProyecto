@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_methods', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
+        Schema::table('payroll_details', function (Blueprint $table) {
+            $table->decimal('deductions_credits', 10, 2)->default(0)->after('deductions');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_methods');
+        Schema::table('payroll_details', function (Blueprint $table) {
+            $table->dropColumn('deductions_credits');
+        });
     }
 };

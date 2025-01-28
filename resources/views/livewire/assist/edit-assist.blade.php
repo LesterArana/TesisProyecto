@@ -26,34 +26,12 @@
             @error('projet_id') <span class="text-red-500">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Actividad -->
         <div class="mb-6">
-            <label for="activity" class="block text-gray-700">Actividad</label>
-            <select id="activity" wire:model="activity" class="block w-full p-2 border border-gray-300 rounded">
-                <option value="">Seleccione la actividad</option>
-                <option value="entrada">Entrada</option>
-                <option value="salida">Salida</option>
-            </select>
-            @error('activity') <span class="text-red-500">{{ $message }}</span> @enderror
+            <label for="date" class="block text-gray-700">Fecha</label>
+            <input type="datetime-local" id="date" wire:model="date" class="block w-full p-2 border border-gray-300 rounded">
+            @error('date') <span class="text-red-500">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Fecha de Inicio -->
-        <div class="mb-6">
-            <label for="start_date" class="block text-gray-700">Fecha de Inicio</label>
-            <input type="datetime-local" id="start_date" wire:model="start_date" class="block w-full p-2 border border-gray-300 rounded">
-            @error('start_date') <span class="text-red-500">{{ $message }}</span> @enderror
-        </div>
-
-        <!-- Fecha de Fin -->
-        @if ($activity === 'salida')
-            <div class="mb-6">
-                <label for="end_date" class="block text-gray-700">Fecha de Fin</label>
-                <input type="datetime-local" id="end_date" wire:model="end_date" class="block w-full p-2 border border-gray-300 rounded">
-                @error('end_date') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-        @endif
-
-        <!-- Estado -->
         <div class="mb-6">
             <label for="status" class="block text-gray-700">Estado</label>
             <select id="status" wire:model="status" class="block w-full p-2 border border-gray-300 rounded">

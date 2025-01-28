@@ -2,12 +2,13 @@
     <section class="mt-10">
         <div class="mx-auto max-w-screen-xl px-4 lg:px-8">
             <div class="flex justify-end my-6">
-                    <button wire:click="redirectt" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
-                        {{ __('Crear Asistencia') }}
-                    </button>
-            </div>
-            <div class="flex justify-end my-6">
-                <button wire:click="redirecttqr" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                <button wire:click="redirectt" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                    {{ __('Crear Asistencia Manual') }}
+                </button>
+                <button wire:click="redirecttBulk" class="inline-flex items-center px-4 py-2 ml-4 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                    {{ __('Crear Asistencia Volcada') }}
+                </button>
+                <button wire:click="redirecttqr" class="inline-flex items-center px-4 py-2 ml-4 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
                     {{ __('Crear Asistencia QR') }}
                 </button>
             </div>
@@ -30,48 +31,36 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            @include('livewire.includes.table-sortable-th',[
-                                'name' => 'employee_id',
-                                'displayName' => 'Empleado'
-                            ])
-                            @include('livewire.includes.table-sortable-th',[
-                                'name' => 'projet_id',
-                                'displayName' => 'Proyecto'
-                            ])
-                            @include('livewire.includes.table-sortable-th',[
-                                'name' => 'start_date',
-                                'displayName' => 'Fecha de Inicio'
-                            ])
-                            @include('livewire.includes.table-sortable-th',[
-                                'name' => 'activity',
-                                'displayName' => 'Actividad'
-                            ])
-                            <th scope="col" class="px-4 py-3">
-                                <span class="sr-only">Acciones</span>
-                            </th>
+                            <th class="px-4 py-3">Empleado</th>
+                            <th class="px-4 py-3">Proyecto</th>
+                            <th class="px-4 py-3">Fecha de Inicio</th>
+                            <th class="px-4 py-3">Fecha de Fin</th>
+                            <th class="px-4 py-3">Estado</th>
+                            <th class="px-4 py-3">Registrado por</th>
+                            <th class="px-4 py-3">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($assists as $assist)
                             <tr wire:key="{{ $assist->id }}" class="border-b">
-                                <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ $assist->employee->person->name ?? ' ' }}
-                                </th>
-                                <td class="px-4 py-3">{{ $assist->projet->name }}</td>
+                                <td class="px-4 py-3">{{ $assist->employee->person->name ?? 'Sin empleado' }}</td>
+                                <td class="px-4 py-3">{{ $assist->projet->name ?? 'Sin proyecto' }}</td>
                                 <td class="px-4 py-3">{{ $assist->start_date }}</td>
-                                <td class="px-4 py-3">{{ $assist->activity ? 'Entrada' : 'Salida' }}</td>
+                                <td class="px-4 py-3">{{ $assist->end_date ?? 'N/A' }}</td>
+                                <td class="px-4 py-3">{{ $assist->status_text }}</td>
+                                <td class="px-4 py-3">{{ $assist->user->name ?? 'Sin usuario' }}</td>
                                 <td class="px-4 py-3 flex items-center justify-end">
                                     <div class="flex space-x-1">
-                                            <a href="{{ route('assists.show', $assist->id) }}" class="bg-green-400 py-2 px-4 rounded-lg text-white text-xs font-bold uppercase text-center">Ver</a>
-                                            <a href="{{ route('assists.edit', $assist->id) }}" class="bg-blue-800 py-2 px-4 rounded-lg text-white text-xs font-bold uppercase text-center">Editar</a>
-                                            <button wire:click="$dispatch('mostrarAlerta',{{ $assist->id }})"
-                                                    class="px-3 py-1 bg-red-500 text-white rounded">Eliminar
-                                            </button>
-
+                                        <a href="{{ route('assists.show', $assist->id) }}" class="bg-green-400 py-2 px-4 rounded-lg text-white text-xs font-bold uppercase text-center">Ver</a>
+                                        <a href="{{ route('assists.edit', $assist->id) }}" class="bg-blue-800 py-2 px-4 rounded-lg text-white text-xs font-bold uppercase text-center">Editar</a>
+                                        <button wire:click="$dispatch('mostrarAlerta',{{ $assist->id }})"
+                                                class="px-3 py-1 bg-red-500 text-white rounded">Eliminar
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -79,11 +68,12 @@
                         </tbody>
                     </table>
                 </div>
+
                 <div class="py-4 px-3">
                     <div class="flex">
                         <div class="flex space-x-4 items-center mb-3">
                             <label class="w-32 text-sm font-medium text-gray-900">Por Página</label>
-                            <select wire:model.live='perPage'
+                            <select wire:model.live="perPage"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                 <option value="5">5</option>
                                 <option value="10">10</option>
@@ -114,7 +104,7 @@
                     cancelButtonText: "Cancelar"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Livewire.dispatch('deleteAssist', {assistId:assistdId});
+                        Livewire.dispatch('deleteAssist', {assistId});
                     }
                 });
             });

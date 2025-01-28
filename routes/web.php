@@ -1,10 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Livewire\PaymentMethod\CreatePaymentMethod;
-use App\Livewire\PaymentMethod\EditPaymentMehthod;
-use App\Livewire\PaymentMethod\ShowPaymentMethod;
-use App\Livewire\PaymentMethod\TablePaymentMethod;
 use App\Models\Employee;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Route;
@@ -14,21 +10,13 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-    Route::get('/payment_methods', TablePaymentMethod::class)->name('payment_methods.index')->middleware('can:payment_methods.index');
-    Route::get('/payment_methods/create', CreatePaymentMethod::class)->name('payment_methods.create')->middleware('can:payment_methods.create');
-    Route::get('/payment_methods/{payment_method}/edit', EditPaymentMehthod::class)->name('payment_methods.edit')->middleware('can:payment_methods.edit');
-    Route::get('/payment_methods/{payment_method}', ShowPaymentMethod::class)->name('payment_methods.show')->middleware('can:payment_methods.show');
-
     Route::get('/credits', \App\Livewire\Credit\TableCredit::class)->name('credit.index')->middleware('can:credit.index');
     Route::get('/credits/create', \App\Livewire\Credit\CreateCredit::class)->name('credit.create')->middleware('can:credit.create');
-    Route::get('/credits/{credit}/edit', \App\Livewire\Credit\EditCredit::class)->name('credit.edit')->middleware('can:credit.edit');
     Route::get('/credits/{credit}', \App\Livewire\Credit\ShowCredit::class)->name('credit.show')->middleware('can:credit.show');
 
     Route::get('/users',\App\Livewire\User\TableUser::class)->name('user.index')->middleware('can:user.index');
@@ -62,6 +50,7 @@ Route::middleware('auth')->group(function () {
     })->name('employees.download-qr');
 
     Route::get('/assists', \App\Livewire\Assist\TableAssist::class)->name('assists.index');
+    Route::get('/assists/bulk-create', \App\Livewire\AssistBulk\CreateAssist::class)->name('assists.create.bulk');
     Route::get('/assists/create/manual', \App\Livewire\Assist\CreateManualAssist::class)->name('assists.create.manual');
     Route::get('/assists/create/qr', \App\Livewire\Assist\CreateQrAssist::class)->name('assists.create.qr');
     Route::get('/assists/{assist}/edit', \App\Livewire\Assist\EditAssist::class)->name('assists.edit');
@@ -71,6 +60,33 @@ Route::middleware('auth')->group(function () {
     Route::get('/projets/create', \App\Livewire\Projet\CreateProjet::class)->name('projets.create');
     Route::get('/projets/{projet}/edit', \App\Livewire\Projet\EditProjet::class)->name('projets.edit');
     Route::get('/projets/{projet}', \App\Livewire\Projet\ShowProjet::class)->name('projets.show');
+
+    Route::get('/travel-expenses', \App\Livewire\TravelExpense\TableTravelExpense::class)->name('travel-expenses.index');
+    Route::get('/travel-expenses/create', \App\Livewire\TravelExpense\CreateTravelExpense::class)->name('travel-expenses.create');
+    Route::get('/travel-expenses/{travelExpense}/edit', \App\Livewire\TravelExpense\EditTravelExpense::class)->name('travel-expenses.edit');
+    Route::get('/travel-expenses/{travelExpense}', \App\Livewire\TravelExpense\ShowTravelExpense::class)->name('travel-expenses.show');
+
+    Route::get('/number-of-hours', \App\Livewire\NumberOfHours\TableNumberOfHours::class)->name('number-of-hours.index');
+    Route::get('/number-of-hours/create', \App\Livewire\NumberOfHours\CreateNumberOfHours::class)->name('number-of-hours.create');
+    Route::get('/number-of-hours/{numberOfHours}/edit', \App\Livewire\NumberOfHours\EditNumberOfHours::class)->name('number-of-hours.edit');
+    Route::get('/number-of-hours/{numberOfHours}', \App\Livewire\NumberOfHours\ShowNumberOfHours::class)->name('number-of-hours.show');
+
+    Route::get('/fixed-payments', \App\Livewire\FixedPayments\TableFixedPayments::class)->name('fixed-payments.index');
+    Route::get('/fixed-payments/create', \App\Livewire\FixedPayments\CreateFixedPayments::class)->name('fixed-payments.create');
+    Route::get('/fixed-payments/{fixedPayment}/edit', \App\Livewire\FixedPayments\EditFixedPayments::class)->name('fixed-payments.edit');
+    Route::get('/fixed-payments/{fixedPayment}', \App\Livewire\FixedPayments\ShowFixedPayments::class)->name('fixed-payments.show');
+
+    Route::get('/schedules', \App\Livewire\Schedules\TableSchedules::class)->name('schedules.index');
+    Route::get('/schedules/create', \App\Livewire\Schedules\CreateSchedules::class)->name('schedules.create');
+    Route::get('/schedules/{schedule}/edit', \App\Livewire\Schedules\EditSchedules::class)->name('schedules.edit');
+    Route::get('/schedules/{schedule}', \App\Livewire\Schedules\ShowSchedules::class)->name('schedules.show');
+
+    Route::get('/payrolls', \App\Livewire\Payrolls\TablePayroll::class)->name('payrolls.index');
+    Route::get('/payrolls/generate', \App\Livewire\Payrolls\GeneratePayroll::class)->name('payrolls.create');
+    Route::get('/payrolls/{payroll}', \App\Livewire\Payrolls\ShowPayroll::class)->name('payrolls.show');
+
+
+
 
 
 

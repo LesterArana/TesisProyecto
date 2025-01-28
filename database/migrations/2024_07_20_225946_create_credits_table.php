@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('credits', function (Blueprint $table) {
             $table->id();
-            $table->string('voucher_number')->unique();
-            $table->date('date');
-            $table->decimal('amount', 15, 2);
-            $table->boolean('status')->default(1);
-            $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('restrict');
-            $table->foreignId('payment_method_id')->nullable()->constrained('payment_methods')->onDelete('restrict');
+            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->decimal('amount', 10, 2); // Monto total del crédito
+            $table->integer('installments'); // Número de cuotas
+            $table->decimal('remaining_amount', 10, 2);
             $table->timestamps();
         });
+
     }
 
     /**

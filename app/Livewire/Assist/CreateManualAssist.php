@@ -11,30 +11,36 @@ class CreateManualAssist extends Component
 {
     public $employee_id;
     public $projet_id;
-    public $activity;
-    public $start_date;
-    public $end_date;
-    public $status = 1;
+    public $date;
+    public $status = 1; // Asistencia activa por defecto
 
     protected $rules = [
         'employee_id' => 'required|exists:employees,id',
         'projet_id' => 'required|exists:projets,id',
-        'activity' => 'required|in:entrada,salida',
-        'start_date' => 'required|date',
-        'end_date' => 'nullable|date|after:start_date',
+        'date' => 'required|date',
     ];
 
     public function store()
     {
-        dd($this->employee_id);
         $this->validate();
+
+        $existingAssist = Assist::where('employee_id', $this->employee_id)
+            ->whereDate('start_date', $this->date)
+            ->exists();
+
+        if ($existingAssist) {
+            session()->flash('alert', [
+                'type' => 'error',
+                'message' => 'Ya existe una asistencia registrada para este empleado en la fecha seleccionada.',
+            ]);
+
+            return;
+        }
 
         Assist::create([
             'employee_id' => $this->employee_id,
             'projet_id' => $this->projet_id,
-            'activity' => $this->activity === 'entrada' ? 1 : 0,
-            'start_date' => $this->start_date,
-            'end_date' => $this->activity === 'salida' ? $this->end_date : null,
+            'start_date' => $this->date,
             'status' => $this->status,
             'user_id' => auth()->id(),
         ]);

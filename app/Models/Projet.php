@@ -14,6 +14,11 @@ class Projet extends Model
         'status',
     ];
 
+    public function assists()
+    {
+        return $this->hasMany(Assist::class);
+    }
+
     public function getStatusTextAttribute()
     {
         return $this->status ? 'Activo' : 'Inactivo';

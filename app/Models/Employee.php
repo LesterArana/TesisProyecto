@@ -30,9 +30,15 @@ class Employee extends Model
         return $this->belongsTo(Person::class);
     }
 
-    public function position(){
-        return $this->belongsTo(Position::class);
+
+    public function assists()
+    {
+        return $this->hasMany(Assist::class);
     }
 
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
 
 }

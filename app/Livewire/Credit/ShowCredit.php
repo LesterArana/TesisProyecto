@@ -7,15 +7,17 @@ use Livewire\Component;
 
 class ShowCredit extends Component
 {
-    public $credit;
+    public $creditId;
 
     public function mount(Credit $credit)
     {
-        $this->credit = $credit;
-
+        $this->creditId = $credit->id; // Asigna el ID del crédito
     }
+
     public function render()
     {
-        return view('livewire.credit.show-credit');
+        $credit = Credit::with(['employee', 'payments'])->findOrFail($this->creditId); // Usa $creditId para buscar
+
+        return view('livewire.credit.show-credit', compact('credit'));
     }
 }

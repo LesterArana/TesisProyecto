@@ -19,8 +19,6 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained('employees')->onDelete('restrict');
             $table->timestamps();
 
-            // Índice compuesto para evitar duplicados por employee_id y date
-            $table->unique(['employee_id', 'date'], 'unique_employee_date');
         });
     }
 

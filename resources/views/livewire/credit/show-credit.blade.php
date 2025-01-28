@@ -1,19 +1,43 @@
-<div class="justify-center">
-    <div class="md:grid md:grid-cols-12 gap-4">
-        <div class="md:col-span-8">
-            <h2 class="text-2xl font-bold mb-5 mt-4">Información del Crédito</h2>
-            <p><strong>Proveedor:</strong> {{ $credit->supplier->person->company_name }}</p>
-            <p><strong>Cuenta Bancaria:</strong> {{ $credit->bankAccount->name_bank }} - {{ $credit->bankAccount->account_number }}</p>
-            <p><strong>Método de Pago:</strong> {{ $credit->paymentMethod->name }}</p>
-            <p><strong>Número de Comprobante:</strong> {{ $credit->voucher_number }}</p>
-            <p><strong>Fecha:</strong> {{ $credit->date }}</p>
-            <p><strong>Monto:</strong> Q{{ number_format($credit->mount, 2) }}</p>
-            <p><strong>Estado:</strong> {{ $credit->status ? 'Activo' : 'Inactivo' }}</p>
-            <p><strong>Fecha de Creación:</strong> {{ $credit->created_at }}</p>
-            @if ($credit->imageable)
-                <p><strong>Imagen:</strong></p>
-                <img src="{{ Storage::url($credit->imageable->path) }}" alt="Comprobante de Crédito" class="w-full h-auto object-cover rounded">
-            @endif
+<div class="container mx-auto mt-10">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Detalles del Crédito</h2>
+
+        <div class="mb-6">
+            <p><strong>Empleado:</strong> {{ $credit->employee->name }}</p>
+            <p><strong>Monto Total:</strong> Q. {{ number_format($credit->amount, 2) }}</p>
+            <p><strong>Cuotas:</strong> {{ $credit->installments }}</p>
+            <p><strong>Saldo Restante:</strong> Q. {{ number_format($credit->remaining_amount, 2) }}</p>
+            <p><strong>Fecha de Creación:</strong> {{ $credit->created_at->format('d/m/Y') }}</p>
+        </div>
+
+        <h3 class="text-xl font-semibold text-gray-700 mb-3">Pagos Asociados</h3>
+        @if ($credit->payments->isEmpty())
+            <p class="text-gray-500">No hay pagos registrados para este crédito.</p>
+        @else
+            <table class="w-full border-collapse border border-gray-300">
+                <thead class="bg-gray-200">
+                <tr>
+                    <th class="border border-gray-300 px-4 py-2">Fecha de Pago</th>
+                    <th class="border border-gray-300 px-4 py-2">Monto Pagado</th>
+                    <th class="border border-gray-300 px-4 py-2">Nómina Asociada</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach ($credit->payments as $payment)
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">{{ $payment->created_at->format('d/m/Y') }}</td>
+                        <td class="border border-gray-300 px-4 py-2">Q. {{ number_format($payment->amount, 2) }}</td>
+                        <td class="border border-gray-300 px-4 py-2">#{{ $payment->payroll_id }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @endif
+
+        <div class="mt-6">
+            <a href="{{ route('credit.index') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                Volver a la Lista de Créditos
+            </a>
         </div>
     </div>
 </div>

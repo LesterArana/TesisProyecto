@@ -11,7 +11,6 @@ class Assist extends Model
     protected $fillable = [
         'start_date',
         'end_date',
-        'activity',
         'status',
         'employee_id',
         'projet_id',
