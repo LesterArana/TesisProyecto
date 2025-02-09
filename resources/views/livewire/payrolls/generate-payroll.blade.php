@@ -3,6 +3,18 @@
         <h2 class="text-2xl font-bold mb-4">Generar Nómina</h2>
 
         <div class="mb-6">
+            <label for="payment_type" class="block text-gray-700">Tipo de Pago</label>
+            <select id="payment_type" wire:model="payment_type"
+                    class="block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
+                <option value="mensual">Pago Mensual</option>
+                <option value="quincenal">Pago Quincenal</option>
+            </select>
+            @error('payment_type')
+            <span class="text-red-500">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="mb-6">
             <label for="start_date" class="block text-gray-700">Fecha de Inicio</label>
             <input type="date" id="start_date" wire:model="start_date"
                    class="block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
@@ -25,19 +37,20 @@
             Generar Nómina
         </button>
     </form>
+</div>
 
-    @if(session()->has('alert'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const alert = @json(session('alert'));
+@push("scripts")
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Livewire.on('mostrarAlertaError', function(message) {
                 Swal.fire({
-                    icon: alert.type,
-                    title: alert.message,
-                    position: 'center',
-                    timer: 3000,
-                    showConfirmButton: false
+                    title: "Error",
+                    text: message,
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
                 });
             });
-        </script>
-    @endif
-</div>
+        });
+    </script>
+@endpush
+

@@ -12,14 +12,17 @@ use App\Models\Credit;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 
+
 class GeneratePayroll extends Component
 {
     public $start_date;
     public $end_date;
+    public $payment_type = 'mensual'; // Valor por defecto
 
     protected $rules = [
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
+        'payment_type' => 'required|in:mensual,quincenal',
     ];
 
     public function createPayroll()
@@ -39,10 +42,8 @@ class GeneratePayroll extends Component
             })->exists();
 
             if ($existingPayroll) {
-                session()->flash('alert', [
-                    'type' => 'error',
-                    'message' => 'El rango de fechas seleccionado ya está cubierto por otra nómina.',
-                ]);
+                $this->dispatch('mostrarAlertaError', 'El rango de fechas seleccionado ya está cubierto por otra nómina.');
+
                 return;
             }
 
@@ -57,6 +58,7 @@ class GeneratePayroll extends Component
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date,
                 'total_amount' => 0,
+                'payment_type' => $this->payment_type, // Guardamos el tipo de pago
                 'user_id' => auth()->id(),
             ]);
 
@@ -68,8 +70,12 @@ class GeneratePayroll extends Component
                     strtotime($this->end_date),
                     86400
                 ))->filter(function ($date) {
-                    return !in_array(date('N', $date), [6, 7]);
+                    return !in_array(date('N', $date), [6, 7]); // Excluir sábados y domingos
                 })->count();
+
+                if ($this->payment_type === 'quincenal') {
+                    $baseSalary /= 2;
+                }
 
                 $dailySalary = $baseSalary / $workingDays;
 
@@ -84,12 +90,12 @@ class GeneratePayroll extends Component
 
                 $daytimeOvertime = NumberOfHour::where('employee_id', $employee->id)
                     ->whereBetween('date', [$this->start_date, $this->end_date])
-                    ->where('type_of_hours', 0) // Tipo 0: diurnas
+                    ->where('type_of_hours', 0)
                     ->sum('amount');
 
                 $nightOvertime = NumberOfHour::where('employee_id', $employee->id)
                     ->whereBetween('date', [$this->start_date, $this->end_date])
-                    ->where('type_of_hours', 1) // Tipo 1: nocturnas
+                    ->where('type_of_hours', 1)
                     ->sum('amount');
 
                 $daytimeOvertimePay = $daytimeOvertime * $employee->position->daytime_overtime;
@@ -119,13 +125,13 @@ class GeneratePayroll extends Component
 
                 $payroll->details()->create([
                     'employee_id' => $employee->id,
-                    'base_salary' => $baseSalary / 2,
+                    'base_salary' => $baseSalary,
                     'worked_days' => $daysWorked,
                     'total_hours' => $daysWorked * 8,
                     'daytime_overtime' => $daytimeOvertimePay,
                     'night_overtime' => $nightOvertimePay,
-                    'deductions' => $deductions ,
-                    'deductions_credits'=> $creditDeduction,
+                    'deductions' => $deductions,
+                    'deductions_credits' => $creditDeduction,
                     'bonuses' => $bonuses,
                     'net_pay' => $netPay,
                 ]);
@@ -140,16 +146,15 @@ class GeneratePayroll extends Component
             session()->flash('alert', [
                 'type' => 'success',
                 'message' => '¡Nómina creada exitosamente!',
+                'position' => 'center',
+                'timer' => 6000,
             ]);
 
             return redirect()->route('payrolls.index');
         } catch (\Exception $e) {
             DB::rollBack();
 
-            session()->flash('alert', [
-                'type' => 'error',
-                'message' => 'Hubo un error al crear la nómina: ' . $e->getMessage(),
-            ]);
+            $this->dispatch('mostrarAlertaError', 'Hubo un error al crear la nómina: ' . $e->getMessage());
         }
     }
 
@@ -158,3 +163,4 @@ class GeneratePayroll extends Component
         return view('livewire.payrolls.generate-payroll');
     }
 }
+

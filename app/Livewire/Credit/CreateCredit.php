@@ -23,7 +23,7 @@ class CreateCredit extends Component
         Credit::create([
             'amount' => $this->amount,
             'installments' => $this->installments,
-            'remaining_amount' => $this->amount, // Inicialmente el monto restante es igual al total
+            'remaining_amount' => $this->amount,
             'employee_id' => $this->employee_id,
         ]);
 

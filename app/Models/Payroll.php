@@ -12,6 +12,7 @@ class Payroll extends Model
     protected $fillable = [
         'start_date',
         'end_date',
+        'payment_type',
         'total_amount',
         'user_id',
     ];

@@ -31,11 +31,11 @@ class TableNumberOfHours extends Component
         $this->resetPage();
     }
 
-    public function deleteNumberOfHours($id)
+    public function deleteNumberOfHours($recordId)
     {
         DB::beginTransaction();
         try {
-            $numberOfHours = NumberOfHour::find($id);
+            $numberOfHours = NumberOfHour::find($recordId);
             if ($numberOfHours) {
                 $numberOfHours->delete();
             }

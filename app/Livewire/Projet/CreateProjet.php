@@ -29,6 +29,8 @@ class CreateProjet extends Component
         session()->flash('alert', [
             'type' => 'success',
             'message' => '¡Proyecto creado exitosamente!',
+            'position' => 'center',
+            'timer' => 6000,
         ]);
 
         return redirect()->route('projets.index');

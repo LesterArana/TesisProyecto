@@ -74,7 +74,7 @@
 @push("scripts")
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            Livewire.on('mostrarAlerta', id => {
+            Livewire.on('mostrarAlerta', recordId => {
                 Swal.fire({
                     title: "¿Eliminar Registro?",
                     text: "¡No podrás recuperar este registro!",
@@ -86,7 +86,7 @@
                     cancelButtonText:"Cancelar"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Livewire.dispatch('deleteNumberOfHours', {id:id});
+                        Livewire.dispatch('deleteNumberOfHours', {recordId:recordId});
                     }
                 });
             });

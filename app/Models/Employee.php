@@ -17,13 +17,9 @@ class Employee extends Model
 
     public function generateQrCode()
     {
-        $data = [
-            'employee_id' => $this->id,
-            'name' => $this->person->name,
-        ];
-
-        return QrCode::size(200)->generate(json_encode($data));
+        return QrCode::size(200)->generate(json_encode(['employee_id' => $this->id]));
     }
+
 
 
     public function person(){

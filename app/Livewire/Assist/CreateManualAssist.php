@@ -12,7 +12,7 @@ class CreateManualAssist extends Component
     public $employee_id;
     public $projet_id;
     public $date;
-    public $status = 1; // Asistencia activa por defecto
+    public $status = 1;
 
     protected $rules = [
         'employee_id' => 'required|exists:employees,id',
@@ -32,8 +32,9 @@ class CreateManualAssist extends Component
             session()->flash('alert', [
                 'type' => 'error',
                 'message' => 'Ya existe una asistencia registrada para este empleado en la fecha seleccionada.',
+                'position' => 'center',
+                'timer' => 6000,
             ]);
-
             return;
         }
 
@@ -48,6 +49,8 @@ class CreateManualAssist extends Component
         session()->flash('alert', [
             'type' => 'success',
             'message' => '¡Asistencia registrada exitosamente!',
+            'position' => 'center',
+            'timer' => 6000,
         ]);
 
         return redirect()->route('assists.index');

@@ -26,7 +26,6 @@ class EditPosition extends Component
 
     public function mount(Position $position)
     {
-        // Inicializa los datos del modelo en las propiedades
         $this->position_id = $position->id;
         $this->name = $position->name;
         $this->description = $position->description;

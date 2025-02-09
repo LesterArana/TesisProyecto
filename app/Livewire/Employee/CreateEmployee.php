@@ -26,7 +26,6 @@ class CreateEmployee extends Component
     {
         $this->validate();
 
-        // Crear el registro en la tabla `people`
         $person = Person::create([
             'name' => $this->name,
             'address' => $this->address,
@@ -36,13 +35,11 @@ class CreateEmployee extends Component
             'status' => $this->status,
         ]);
 
-        // Crear el registro en la tabla `employees`
         Employee::create([
             'person_id' => $person->id,
             'position_id' => $this->position_id,
         ]);
 
-        // Mensaje de éxito
         session()->flash('alert', [
             'type' => 'success',
             'message' => '¡Empleado creado exitosamente!',
@@ -50,13 +47,11 @@ class CreateEmployee extends Component
             'timer' => 6000,
         ]);
 
-        // Redirigir a la lista de empleados
         return redirect()->route('employees.index');
     }
 
     public function render()
     {
-        // Obtener las posiciones activas para el select
         $positions = Position::where('status', 1)->pluck('name', 'id');
 
         return view('livewire.employee.create-employee', compact('positions'));

@@ -38,18 +38,12 @@ class TableCredit extends Component
             $credit = Credit::find($creditId);
 
             if (!$credit) {
-                session()->flash('alert', [
-                    'type' => 'error',
-                    'message' => 'El crédito no existe.',
-                ]);
+                $this->dispatch('mostrarAlertaError', 'El crédito no existe.');
                 return;
             }
 
             if ($credit->payments()->exists()) {
-                session()->flash('alert', [
-                    'type' => 'error',
-                    'message' => 'El crédito no puede ser eliminado porque tiene pagos asociados.',
-                ]);
+                $this->dispatch('mostrarAlertaError', 'El crédito no puede ser eliminado porque tiene pagos asociados.');
                 return;
             }
 
@@ -64,6 +58,7 @@ class TableCredit extends Component
                 'timer' => 6000,
             ]);
 
+            return redirect()->route('credit.index');
         } catch (\Exception $e) {
             DB::rollBack();
 

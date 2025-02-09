@@ -3,9 +3,9 @@
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Detalles del Crédito</h2>
 
         <div class="mb-6">
-            <p><strong>Empleado:</strong> {{ $credit->employee->name }}</p>
+            <p><strong>Empleado:</strong> {{ $credit->employee->person->name }}</p>
             <p><strong>Monto Total:</strong> Q. {{ number_format($credit->amount, 2) }}</p>
-            <p><strong>Cuotas:</strong> {{ $credit->installments }}</p>
+            <p><strong>Cuotas pendientes:</strong> {{ $credit->installments }}</p>
             <p><strong>Saldo Restante:</strong> Q. {{ number_format($credit->remaining_amount, 2) }}</p>
             <p><strong>Fecha de Creación:</strong> {{ $credit->created_at->format('d/m/Y') }}</p>
         </div>

@@ -53,7 +53,6 @@ class EditUser extends Component
 
         $user->syncRoles($this->role);
 
-        if ($user->isDirty()) {
             $user->save();
             session()->flash('alert', [
                 'type' => 'success',
@@ -61,7 +60,6 @@ class EditUser extends Component
                 'position' => 'center',
                 'timer' => 6000,
             ]);
-        }
 
         return redirect()->route('user.index');
     }

@@ -8,7 +8,7 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class TableFixedPayments extends Component
+class   TableFixedPayments extends Component
 {
     use WithPagination;
 
@@ -31,11 +31,11 @@ class TableFixedPayments extends Component
         $this->resetPage();
     }
 
-    public function deleteFixedPayment($id)
+    public function deleteFixedPayment($paymentId)
     {
         DB::beginTransaction();
         try {
-            $fixedPayment = FixedPayment::findOrFail($id);
+            $fixedPayment = FixedPayment::findOrFail($paymentId);
             $fixedPayment->delete();
 
             DB::commit();
@@ -46,6 +46,7 @@ class TableFixedPayments extends Component
                 'position' => 'center',
                 'timer' => 6000,
             ]);
+            return redirect()->route('fixed-payments.index');
         } catch (\Exception $e) {
             DB::rollBack();
 

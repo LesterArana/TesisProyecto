@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/assists', \App\Livewire\Assist\TableAssist::class)->name('assists.index');
     Route::get('/assists/bulk-create', \App\Livewire\AssistBulk\CreateAssist::class)->name('assists.create.bulk');
     Route::get('/assists/create/manual', \App\Livewire\Assist\CreateManualAssist::class)->name('assists.create.manual');
-    Route::get('/assists/create/qr', \App\Livewire\Assist\CreateQrAssist::class)->name('assists.create.qr');
+    Route::get('/assists/create/qr', \App\Livewire\Assist\QrAsist::class)->name('assists.create.qr');
     Route::get('/assists/{assist}/edit', \App\Livewire\Assist\EditAssist::class)->name('assists.edit');
     Route::get('/assists/{assist}', \App\Livewire\Assist\ShowAssist::class)->name('assists.show');
 

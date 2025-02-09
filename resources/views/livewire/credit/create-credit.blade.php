@@ -44,9 +44,10 @@
         </div>
 
         <div class="flex justify-center">
-            <x-primary-button class="w-full">
+            <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition ease-in-out duration-200">
                 {{ __('Guardar') }}
-            </x-primary-button>
+            </button>
         </div>
     </form>
 </div>

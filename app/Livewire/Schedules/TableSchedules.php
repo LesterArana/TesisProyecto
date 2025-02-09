@@ -31,11 +31,11 @@ class TableSchedules extends Component
         $this->resetPage();
     }
 
-    public function deleteSchedule($id)
+    public function deleteSchedule( $scheduleId)
     {
         DB::beginTransaction();
         try {
-            $schedule = Schedule::findOrFail($id);
+            $schedule = Schedule::findOrFail($scheduleId);
             $schedule->delete();
 
             DB::commit();
@@ -46,6 +46,8 @@ class TableSchedules extends Component
                 'position' => 'center',
                 'timer' => 6000,
             ]);
+            return redirect()->route('schedules.index');
+
         } catch (\Exception $e) {
             DB::rollBack();
 

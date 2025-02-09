@@ -42,6 +42,7 @@
                             <th class="px-4 py-3">Fecha de Fin</th>
                             <th class="px-4 py-3">Estado</th>
                             <th class="px-4 py-3">Registrado por</th>
+                            <th class="px-4 py-3">Fecha y Hora</th>
                             <th class="px-4 py-3">Acciones</th>
                         </tr>
                         </thead>
@@ -54,6 +55,7 @@
                                 <td class="px-4 py-3">{{ $assist->end_date ?? 'N/A' }}</td>
                                 <td class="px-4 py-3">{{ $assist->status_text }}</td>
                                 <td class="px-4 py-3">{{ $assist->user->name ?? 'Sin usuario' }}</td>
+                                <td class="px-4 py-3">{{ $assist->created_at }}</td>
                                 <td class="px-4 py-3 flex items-center justify-end">
                                     <div class="flex space-x-1">
                                         <a href="{{ route('assists.show', $assist->id) }}" class="bg-green-400 py-2 px-4 rounded-lg text-white text-xs font-bold uppercase text-center">Ver</a>
